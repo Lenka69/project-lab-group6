@@ -74,6 +74,9 @@ const ProductDetail = () => {
               <p className="product-detail-price">
                 Rp {product.price.toLocaleString("id-ID")}
               </p>
+              <p>
+                <b>Stock:</b> {product.stock}
+              </p>
               <p className="product-detail-desc">{product.description}</p>
 
               <div className="product-actions">

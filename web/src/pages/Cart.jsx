@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../assets/cart.css";
 import Layout from "../components/Layout";
 import { getUserCart, removeProductCart } from "../services/cart";
+import { checkoutCart } from "../services/transaction";
 
 const Cart = () => {
   const [carts, setCarts] = useState(null);
@@ -29,8 +30,16 @@ const Cart = () => {
       await removeProductCart(user.id, productId);
       fetchCart();
     } catch (error) {
-      console.error("Error removing item:", error);
       alert("Gagal menghapus produk dari keranjang.");
+    }
+  };
+
+  const checkout = async () => {
+    try {
+      await checkoutCart(user.id);
+      fetchCart();
+    } catch (error) {
+      alert("Gagal checkout barang.");
     }
   };
 
@@ -80,7 +89,9 @@ const Cart = () => {
               </h3>
 
               <div className="cart-actions">
-                <button className="checkout-btn">Checkout</button>
+                <button className="checkout-btn" onClick={checkout}>
+                  Checkout
+                </button>
               </div>
             </div>
           </>

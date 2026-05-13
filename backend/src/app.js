@@ -8,6 +8,7 @@ const { connectDB, seedProductData, seedUserData } = require("./config/db");
 const productRoute = require("./routers/product.route");
 const authRoute = require("./routers/auth.route");
 const cartRoute = require("./routers/cart.route");
+const transactionRoute = require("./routers/transaction.route");
 
 // Middlewares
 const authMiddleware = require("./middlewares/auth.middleware");
@@ -29,7 +30,7 @@ const start = async () => {
   // Protected Routes
   app.use("/products", authMiddleware, productRoute);
   app.use("/cart", authMiddleware, cartRoute);
-  // app.use("/transaction", authMiddleware);
+  app.use("/transactions", authMiddleware, transactionRoute);
 
   // Public Routes
   app.use("/auth", authRoute);

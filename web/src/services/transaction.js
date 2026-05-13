@@ -1,18 +1,28 @@
-import { HTTP_GET, CONTENT_TYPE, APPLICATION_JSON, HTTP_POST } from "../constants/http";
-import { fetchWithAuth } from "./api";
+import { HTTP_GET, APPLICATION_JSON, HTTP_POST } from "../constants/http";
+import { BASE_URL, fetchWithAuth } from "./api";
 
-export const getUserTransactionHistory = (userId) =>
-  fetchWithAuth(`/transaction/history/${userId}`, HTTP_GET);
+export const getUserTransactionHistory = async (userId) => {
+  const res = await fetchWithAuth(`/transactions/${userId}`, HTTP_GET);
+  return res;
+};
 
+export const checkoutCart = async (userId) => {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${BASE_URL}/transactions/checkout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ userId }),
+  });
 
-export const checkoutTransaction = () => {
-    const res = await fetch(`${BASE_URL}/transaction/checkout`, {
-        method: HTTP_POST,
-        headers: { "Content-Type": APPLICATION_JSON },
-        body: JSON.stringify()
-    });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(
+      errorData.message || "Failed to checkout product from cart",
+    );
+  }
 
-    if (!res.ok) throw new Error("Failed to checkout products");
-    
-    return res.json();
+  return res.json();
 };
