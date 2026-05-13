@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../components/Footer";
-import "../assets/auth.css";
 import { login, register } from "../services/auth";
+import "../assets/auth.css";
 
 const Register = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });

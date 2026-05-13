@@ -13,7 +13,8 @@ export default function Header() {
         <Link to="/">Home</Link>
         <Link to="/products">Products</Link>
         <Link to="/cart">Cart</Link>
-        <Link to="/transactions">Checkout</Link>
+        <Link to="/transactions">Transactions</Link>
+        <Link to="/">Logout</Link>
       </nav>
     </header>
   );

@@ -30,7 +30,8 @@ export const fetchWithAuth = async (path, method, body) => {
     throw new Error(`Request failed: ${res.status} - ${res.error}`);
   }
 
-  return res.json();
+  const apiResponse = await res.json();
+  return apiResponse.data;
 };
 
 export const logout = () => {

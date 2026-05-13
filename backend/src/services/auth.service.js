@@ -1,16 +1,17 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const { BadRequestError, UnauthorizedError } = require("../utils/errors");
 
 const EMAIL_VALIDATION_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const register = async ({ name, email, password }) => {
   if (!email || !EMAIL_VALIDATION_REGEX.test(email)) {
-    return res.status(400).json({ message: "Invalid email format" });
+    throw new BadRequestError("Invalid Email format!");
   }
 
   const existing = await User.findOne({ email });
-  if (existing) throw { status: 400, message: "email already registered!" };
+  if (existing) throw new BadRequestError("Email already registered!");
 
   const hashedPassword = await bcrypt.hash(
     password,
@@ -26,13 +27,11 @@ const register = async ({ name, email, password }) => {
 };
 
 const login = async ({ email, password }) => {
-  console.log("email", email);
-  console.log("password", password);
   const user = await User.findOne({ email });
-  if (!user) throw { status: 401, message: "Unauthorized" };
+  if (!user) throw new UnauthorizedError();
 
   const ok = await bcrypt.compare(password, user.password);
-  if (!ok) throw { status: 401, message: "Unauthorized" };
+  if (!ok) throw new UnauthorizedError();
 
   const accessToken = jwt.sign(
     { id: user._id, email: user.email },

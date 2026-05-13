@@ -6,7 +6,8 @@
     "price": 19499000,
     "rating": 4.8,
     "sold": 1247,
-    "img": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "ASUS ZenBook 14 OLED UX3405",
@@ -15,7 +16,8 @@
     "price": 17999000,
     "rating": 4.6,
     "sold": 892,
-    "img": "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Apple MacBook Air M3 13-inch",
@@ -24,7 +26,8 @@
     "price": 18499000,
     "rating": 4.9,
     "sold": 3421,
-    "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Dell XPS 13 Plus 9340",
@@ -33,7 +36,8 @@
     "price": 24999000,
     "rating": 4.2,
     "sold": 456,
-    "img": "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "HP Pavilion 14 Ryzen 5",
@@ -42,7 +46,8 @@
     "price": 9799000,
     "rating": 3.8,
     "sold": 2134,
-    "img": "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Acer Swift Go 14 Intel Core Ultra",
@@ -51,7 +56,8 @@
     "price": 13499000,
     "rating": 4.1,
     "sold": 768,
-    "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "MSI Modern 15 B13M",
@@ -60,7 +66,8 @@
     "price": 10299000,
     "rating": 3.9,
     "sold": 543,
-    "img": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Lenovo IdeaPad Slim 3i",
@@ -69,7 +76,8 @@
     "price": 7999000,
     "rating": 4.3,
     "sold": 4287,
-    "img": "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "ASUS ROG Zephyrus G14 2024",
@@ -78,7 +86,8 @@
     "price": 32999000,
     "rating": 4.7,
     "sold": 312,
-    "img": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Apple MacBook Pro M4 14-inch",
@@ -87,7 +96,8 @@
     "price": 28999000,
     "rating": 4.9,
     "sold": 1876,
-    "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "HP Victus 15 Gaming Ryzen 7",
@@ -96,7 +106,8 @@
     "price": 14999000,
     "rating": 4.4,
     "sold": 1654,
-    "img": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Lenovo LOQ 15 RTX 4050",
@@ -105,7 +116,8 @@
     "price": 15999000,
     "rating": 4.2,
     "sold": 1123,
-    "img": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Acer Predator Helios Neo 16",
@@ -114,7 +126,8 @@
     "price": 22499000,
     "rating": 4.6,
     "sold": 589,
-    "img": "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1624705002806-5d72df19c3ad?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "MSI Katana 15 RTX 4060",
@@ -123,7 +136,8 @@
     "price": 18999000,
     "rating": 4.0,
     "sold": 734,
-    "img": "https://images.unsplash.com/photo-1595434091143-b375ced5fe5c?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1595434091143-b375ced5fe5c?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Dell Inspiron 14 5440",
@@ -132,7 +146,8 @@
     "price": 11299000,
     "rating": 3.6,
     "sold": 421,
-    "img": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Axioo Mybook Hype 5",
@@ -141,7 +156,8 @@
     "price": 5499000,
     "rating": 3.7,
     "sold": 3156,
-    "img": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Huawei MateBook D14 2024",
@@ -150,7 +166,8 @@
     "price": 10999000,
     "rating": 4.1,
     "sold": 678,
-    "img": "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1484788984921-03950022c9ef?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Samsung Galaxy Book4 Pro",
@@ -159,7 +176,8 @@
     "price": 21499000,
     "rating": 4.5,
     "sold": 845,
-    "img": "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "Microsoft Surface Laptop 7",
@@ -168,7 +186,8 @@
     "price": 23999000,
     "rating": 4.8,
     "sold": 967,
-    "img": "https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?w=500&h=500&fit=crop",
+    "stock": 100
   },
   {
     "name": "LG Gram 14 2024",
@@ -177,6 +196,7 @@
     "price": 19999000,
     "rating": 4.3,
     "sold": 412,
-    "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop"
+    "img": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=500&fit=crop",
+    "stock": 100
   }
 ]

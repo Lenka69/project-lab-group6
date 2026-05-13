@@ -1,11 +1,37 @@
 const mongoose = require("mongoose");
 
-const transactionSchema = new mongoose.Schema({
-  name: { type: String },
-  img: { type: String },
-  price: { type: Number },
-  created_date: { type: Date, default: Date.now },
-  quantity: { type: Number },
-});
+const transactionItemSchema = new mongoose.Schema(
+  {
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
+    name: { type: String, required: true },
+    img: { type: String },
+    price: { type: Number, required: true },
+    quantity: { type: Number, required: true, min: 1 },
+  },
+  { _id: false },
+);
 
-module.exports = mongoose.model("Cart", cartSchema);
+const transactionSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    items: {
+      type: [transactionItemSchema],
+      required: true,
+    },
+    totalAmount: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+  },
+  { timestamps: true },
+);
+
+module.exports = mongoose.model("Transactions", transactionSchema);

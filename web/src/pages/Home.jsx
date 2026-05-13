@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { getPopularProducts } from "../services/product";
 
-export default function Home() {
+const Home = () => {
   const navigate = useNavigate();
 
   const [featured, setFeatured] = useState([]);
@@ -58,4 +58,6 @@ export default function Home() {
       </section>
     </Layout>
   );
-}
+};
+
+export default Home;

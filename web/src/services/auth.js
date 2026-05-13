@@ -9,8 +9,8 @@ export const login = async (email, password) => {
   });
 
   if (!res.ok) throw new Error("Login failed");
-
-  return res.json();
+  const apiResponse = await res.json();
+  return apiResponse.data;
 };
 
 export const register = async (name, email, password) => {

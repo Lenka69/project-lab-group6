@@ -1,26 +1,24 @@
 const authService = require("../services/auth.service");
+const { sendSuccess } = require("../utils/apiResponse");
+const logger = require("../utils/logger");
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   try {
     const user = await authService.register(req.body);
-    res.status(201).json(user);
-  } catch (e) {
-    res
-      .status(e.status || 500)
-      .json({ message: e.message || "Internal Server Error" });
+    sendSuccess(res, user, "User Created", 201);
+  } catch (err) {
+    logger.error("Error happened when user tried to register", err.message);
+    next(err);
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
-    console.log("login request", req.body);
     const result = await authService.login(req.body);
-    res.json(result);
-  } catch (e) {
-    console.log("login error", e);
-    res
-      .status(e.status || 500)
-      .json({ message: e.message || "Internal Server Error" });
+    sendSuccess(res, result);
+  } catch (err) {
+    logger.error("Error happened when user tried to login", err.message);
+    next(err);
   }
 };
 

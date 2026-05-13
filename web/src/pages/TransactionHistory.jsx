@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import "../assets/checkout.css";
 import Layout from "../components/Layout";
 
-export default function Checkout() {
+const TransactionHistory = () => {
   const [transactions, setTransactions] = useState([]);
 
   return (
     <Layout>
       <section className="checkout-page">
-        <h2>🛒 Checkout</h2>
+        <h2>🛒 Transaction History</h2>
 
         {transactions.length === 0 ? (
           <p className="empty-checkout">Belum ada item yang kamu Checkout.</p>
@@ -50,4 +50,6 @@ export default function Checkout() {
       </section>
     </Layout>
   );
-}
+};
+
+export default TransactionHistory;

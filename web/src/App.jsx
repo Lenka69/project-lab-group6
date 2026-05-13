@@ -8,7 +8,7 @@ import Cart from "./pages/Cart";
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import Me from "./pages/Me.jsx";
-import Checkout from "./pages/Checkout.jsx";
+import TransactionHistory from "./pages/TransactionHistory.jsx";
 import RootRedirect from "./components/RootRedirect.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
@@ -24,7 +24,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/transactions" element={<Checkout />} />
+        <Route path="/transactions" element={<TransactionHistory />} />
       </Route>
     </Routes>
   );

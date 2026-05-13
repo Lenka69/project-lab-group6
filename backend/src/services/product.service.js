@@ -1,4 +1,6 @@
 const Product = require("../models/Product");
+const { BadRequestError } = require("../utils/errors");
+const logger = require("../utils/logger");
 
 const create = async (data) => {
   const product = new Product(data);
@@ -14,15 +16,36 @@ const getPopularProducts = async (limit = 5) => {
 };
 
 const getById = async (id) => {
-  return await Product.findById(id);
+  const product = await Product.findById(id);
+  if (!product) {
+    logger.error(`Product is not found with id: ${id}`);
+    throw new BadRequestError("Product not found");
+  }
+
+  return product;
 };
 
 const update = async (id, data) => {
-  return await Product.findByIdAndUpdate(id, data, { new: true });
+  const updatedProduct = await Product.findByIdAndUpdate(id, data, {
+    new: true,
+  });
+
+  if (!updatedProduct) {
+    logger.error(`Product with id: ${id} is not found`);
+    throw new BadRequestError("Product not found");
+  }
+
+  return updatedProduct;
 };
 
 const deleteProduct = async (id) => {
-  return await Product.findByIdAndDelete(id);
+  const deletedProduct = await Product.findByIdAndDelete(id);
+  if (!deletedProduct) {
+    logger.error(`Product with id: ${id} is not found`);
+    throw new BadRequestError("Product not found");
+  }
+
+  return deletedProduct;
 };
 
 module.exports = {

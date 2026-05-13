@@ -5,7 +5,7 @@ import "../assets/products.css";
 import Layout from "../components/Layout";
 import { getProducts } from "../services/product";
 
-export default function Products() {
+const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
@@ -44,4 +44,6 @@ export default function Products() {
       </section>
     </Layout>
   );
-}
+};
+
+export default Products;
