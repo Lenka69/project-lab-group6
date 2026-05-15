@@ -1,8 +1,6 @@
 import { APPLICATION_JSON } from "../constants/http";
 
 export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const HTTP_GET = "GET";
-const HTTP_POST = "POST";
 
 const handleSessionExpired = () => {
   localStorage.removeItem("token");
@@ -10,8 +8,13 @@ const handleSessionExpired = () => {
   window.location.href = "/login?session=expired";
 };
 
-export const fetchWithAuth = async (path, method, body) => {
+export const fetchWithAuth = async (path, method = "GET", body = null) => {
+  if (!BASE_URL) {
+    throw new Error("VITE_API_BASE_URL belum diset");
+  }
+
   const token = localStorage.getItem("token");
+
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
     headers: {
@@ -26,12 +29,16 @@ export const fetchWithAuth = async (path, method, body) => {
     throw new Error("Session expired");
   }
 
+  const text = await res.text();
+  const apiResponse = text ? JSON.parse(text) : null;
+
   if (!res.ok) {
-    throw new Error(`Request failed: ${res.status} - ${res.error}`);
+    throw new Error(
+      apiResponse?.message || `Request failed with status ${res.status}`
+    );
   }
 
-  const apiResponse = await res.json();
-  return apiResponse.data;
+  return apiResponse?.data ?? null;
 };
 
 export const logout = () => {
