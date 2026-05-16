@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import Footer from "../components/Footer";
+import LogRocket from "logrocket";
 import { login } from "../services/auth";
 import "../assets/auth.css";
 
@@ -9,21 +9,25 @@ const Login = () => {
   const [error, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
+
   const sessionExpired = searchParams.get("session") === "expired";
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setErrors("");
+    setErrors({});
     setLoading(true);
 
     try {
       const { accessToken, user } = await login(form.email, form.password);
+
       localStorage.setItem("token", accessToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      if (import.meta.env.PROD) {
-        LogRocket.identify(user.id, {
+      const logRocketAppId = import.meta.env.VITE_LOGROCKET_APP_ID;
+
+      if (import.meta.env.PROD && logRocketAppId && user) {
+        LogRocket.identify(user.id || user._id || user.email, {
           name: user.name,
           email: user.email,
         });
@@ -31,23 +35,28 @@ const Login = () => {
 
       navigate("/");
     } catch (err) {
-      setErrors({ auth: err.message });
+      setErrors({
+        auth: err.message || "Login failed",
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const validateField = (id, value, allValues) => {
+  const validateField = (id, value) => {
     switch (id) {
       case "email":
         if (!value) return "Email wajib diisi";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
           return "Format email tidak valid";
+        }
         return "";
+
       case "password":
         if (!value) return "Password wajib diisi";
-        if (value.length <= 6) return "Password tidak boleh dibawah 6 digit";
+        if (value.length < 6) return "Password minimal 6 karakter";
         return "";
+
       default:
         return "";
     }
@@ -55,71 +64,83 @@ const Login = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    const nextForm = { ...form, [id]: value };
+
+    const nextForm = {
+      ...form,
+      [id]: value,
+    };
+
     setForm(nextForm);
 
     setErrors((prev) => ({
       ...prev,
-      [id]: validateField(id, value, nextForm),
+      [id]: validateField(id, value),
+      auth: "",
     }));
   };
 
   const isFormInvalid = () => {
-    return error.email || error.password;
+    return Boolean(error.email || error.password || loading);
   };
 
   return (
-    <>
-      <div className="app-wrapper">
-        <main className="main-content">
-          <div className={"form-wrapper"}>
-            <form action="" onSubmit={handleLogin}>
-              <div className="input-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="john.doe@email.com"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
-                {error.email && (
-                  <span className="field-error">{error.email}</span>
-                )}
-              </div>
-
-              <div className="input-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
-                />
-                {error.password && (
-                  <span className="field-error">{error.password}</span>
-                )}
-              </div>
-
-              {error.auth && <div className="auth-error">{error.auth}</div>}
-              {sessionExpired && (
-                <div className="auth-error">
-                  Sesi kamu sudah berakhir. Silakan login kembali.
-                </div>
+    <div className="app-wrapper">
+      <main className="main-content">
+        <div className="form-wrapper">
+          <form onSubmit={handleLogin}>
+            <div className="input-group">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="john.doe@email.com"
+                value={form.email}
+                onChange={handleChange}
+                autoComplete="email"
+                required
+              />
+              {error.email && (
+                <span className="field-error">{error.email}</span>
               )}
+            </div>
 
-              <button>Login</button>
-              <p className="auth-footer">
-                Belum punya akun? <NavLink to="/register">Daftar</NavLink>
-              </p>
-            </form>
-          </div>
-        </main>
-      </div>
-    </>
+            <div className="input-group">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={handleChange}
+                autoComplete="current-password"
+                required
+              />
+              {error.password && (
+                <span className="field-error">{error.password}</span>
+              )}
+            </div>
+
+            {error.auth && <div className="auth-error">{error.auth}</div>}
+
+            {sessionExpired && (
+              <div className="auth-error">
+                Sesi kamu sudah berakhir. Silakan login kembali.
+              </div>
+            )}
+
+            <button type="submit" disabled={isFormInvalid()}>
+              {loading ? "Memproses..." : "Login"}
+            </button>
+
+            <p className="auth-footer">
+              Belum punya akun? <NavLink to="/register">Daftar</NavLink>
+            </p>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 };
 

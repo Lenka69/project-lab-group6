@@ -1,22 +1,26 @@
-import App from "./App";
-import ResetScroll from "./components/ResetScroll";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { createRoot } from "react-dom/client";
+import LogRocket from "logrocket";
+import App from "./App.jsx";
+import ResetScroll from "./components/ResetScroll.jsx";
 
-const appId = import.meta.env.VITE_LOGROCKET_APP_ID;
+const logRocketAppId = import.meta.env.VITE_LOGROCKET_APP_ID;
 
-if (appId && import.meta.env.PROD) {
-  LogRocket.init(appId);
+if (import.meta.env.PROD && logRocketAppId) {
+  LogRocket.init(logRocketAppId);
 }
 
-createRoot(document.getElementById("root")).render(
-  <BrowserRouter
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
-  >
-    <ResetScroll />
-    <App />
-  </BrowserRouter>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
+      <ResetScroll />
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );
