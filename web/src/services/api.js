@@ -19,9 +19,13 @@ export const fetchWithAuth = async (path, method = "GET", body = null) => {
     method,
     headers: {
       "Content-Type": APPLICATION_JSON,
-      ...(token && { Authorization: `Bearer ${token}` }),
+      ...(token && {
+        Authorization: `Bearer ${token}`,
+      }),
     },
-    ...(body && { body: JSON.stringify(body) }),
+    ...(body && {
+      body: JSON.stringify(body),
+    }),
   });
 
   if (res.status === 401) {

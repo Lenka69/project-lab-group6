@@ -5,43 +5,17 @@ import { login } from "../services/auth";
 import "../assets/auth.css";
 
 const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
   const [error, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
 
   const sessionExpired = searchParams.get("session") === "expired";
   const navigate = useNavigate();
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setErrors({});
-    setLoading(true);
-
-    try {
-      const { accessToken, user } = await login(form.email, form.password);
-
-      localStorage.setItem("token", accessToken);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      const logRocketAppId = import.meta.env.VITE_LOGROCKET_APP_ID;
-
-      if (import.meta.env.PROD && logRocketAppId && user) {
-        LogRocket.identify(user.id || user._id || user.email, {
-          name: user.name,
-          email: user.email,
-        });
-      }
-
-      navigate("/");
-    } catch (err) {
-      setErrors({
-        auth: err.message || "Login failed",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const validateField = (id, value) => {
     switch (id) {
@@ -81,6 +55,47 @@ const Login = () => {
 
   const isFormInvalid = () => {
     return Boolean(error.email || error.password || loading);
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const nextErrors = {
+      email: validateField("email", form.email),
+      password: validateField("password", form.password),
+    };
+
+    setErrors(nextErrors);
+
+    if (Object.values(nextErrors).some(Boolean)) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { accessToken, user } = await login(form.email, form.password);
+
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      const logRocketAppId = import.meta.env.VITE_LOGROCKET_APP_ID;
+
+      if (import.meta.env.PROD && logRocketAppId && user) {
+        LogRocket.identify(user.id || user._id || user.email, {
+          name: user.name,
+          email: user.email,
+        });
+      }
+
+      navigate("/");
+    } catch (err) {
+      setErrors({
+        auth: err.message || "Login gagal",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

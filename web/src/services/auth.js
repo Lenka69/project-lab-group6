@@ -3,6 +3,10 @@ import { BASE_URL } from "./api";
 
 export const login = async (email, password) => {
   try {
+    if (!BASE_URL) {
+      throw new Error("VITE_API_BASE_URL belum diset");
+    }
+
     const res = await fetch(`${BASE_URL}/auth/login`, {
       method: HTTP_POST,
       headers: {
@@ -18,7 +22,13 @@ export const login = async (email, password) => {
     const apiResponse = text ? JSON.parse(text) : null;
 
     if (!res.ok) {
-      throw new Error(apiResponse?.message || "Login failed");
+      if (res.status === 401) {
+        throw new Error("Email atau password salah, atau akun belum terdaftar.");
+      }
+
+      throw new Error(
+        apiResponse?.message || `Login gagal. Status: ${res.status}`
+      );
     }
 
     return apiResponse.data;
@@ -29,6 +39,10 @@ export const login = async (email, password) => {
 
 export const register = async (name, email, password) => {
   try {
+    if (!BASE_URL) {
+      throw new Error("VITE_API_BASE_URL belum diset");
+    }
+
     const res = await fetch(`${BASE_URL}/auth/register`, {
       method: HTTP_POST,
       headers: {
@@ -45,7 +59,9 @@ export const register = async (name, email, password) => {
     const apiResponse = text ? JSON.parse(text) : null;
 
     if (!res.ok) {
-      throw new Error(apiResponse?.message || "Register failed");
+      throw new Error(
+        apiResponse?.message || `Register gagal. Status: ${res.status}`
+      );
     }
 
     return {
