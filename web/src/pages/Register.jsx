@@ -5,7 +5,7 @@ import { login, register } from "../services/auth";
 import "../assets/auth.css";
 
 const Register = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "" ,confirmPassword: ""});
   const [success, setSuccess] = useState(false);
   const [error, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const { status } = await register(form.name, form.email, form.password);
+      const { status } = await register(form.name, form.email, form.password, form.confirmPassword);
 
       if (status == 201) setSuccess(true);
     } catch (err) {
@@ -62,7 +62,7 @@ const Register = () => {
   };
 
   const isFormInvalid = () => {
-    return error.email || error.password;
+    return error.email || error.password || error.confirmPassword || error.name;
   };
 
   return (
