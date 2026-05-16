@@ -24,30 +24,29 @@ const normalizeOrigin = (origin) => {
 
 const allowedOrigins = (process.env.ALLOWED_DOMAIN || "http://localhost:5173")
   .split(",")
-  .map((origin) => normalizeOrigin(origin.trim()))
+  .map((origin) => origin.trim().replace(/\/$/, ""))
   .filter(Boolean);
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    // Allow request tanpa origin, misalnya dari Postman, mobile app, atau server-to-server
-    if (!origin) {
-      return callback(null, true);
-    }
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
 
-    const normalizedOrigin = normalizeOrigin(origin);
+      const normalizedOrigin = origin.replace(/\/$/, "");
 
-    if (allowedOrigins.includes(normalizedOrigin)) {
-      return callback(null, true);
-    }
+      if (allowedOrigins.includes(normalizedOrigin)) {
+        return callback(null, true);
+      }
 
-    return callback(
-      new Error(`CORS blocked for origin: ${normalizedOrigin}`)
-    );
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+      return callback(new Error(`CORS blocked for origin: ${normalizedOrigin}`));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(cors(corsOptions));
 
