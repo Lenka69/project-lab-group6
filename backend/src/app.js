@@ -24,29 +24,48 @@ const normalizeOrigin = (origin) => {
 
 const allowedOrigins = (process.env.ALLOWED_DOMAIN || "http://localhost:5173")
   .split(",")
-  .map((origin) => origin.trim().replace(/\/$/, ""))
+  .map((origin) => normalizeOrigin(origin.trim()))
   .filter(Boolean);
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) {
-        return callback(null, true);
-      }
+const isAllowedVercelPreview = (origin) => {
+  try {
+    const url = new URL(origin);
+    const hostname = url.hostname;
 
-      const normalizedOrigin = origin.replace(/\/$/, "");
+    return (
+      url.protocol === "https:" &&
+      hostname.endsWith(".vercel.app") &&
+      hostname.startsWith("project-lab-group6")
+    );
+  } catch (error) {
+    return false;
+  }
+};
 
-      if (allowedOrigins.includes(normalizedOrigin)) {
-        return callback(null, true);
-      }
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Izinkan request tanpa origin, misalnya dari Postman, mobile app, atau server-to-server
+    if (!origin) {
+      return callback(null, true);
+    }
 
-      return callback(new Error(`CORS blocked for origin: ${normalizedOrigin}`));
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+    const normalizedOrigin = normalizeOrigin(origin);
+
+    if (
+      allowedOrigins.includes(normalizedOrigin) ||
+      isAllowedVercelPreview(normalizedOrigin)
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(
+      new Error(`CORS blocked for origin: ${normalizedOrigin}`)
+    );
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
 app.use(cors(corsOptions));
 
@@ -66,6 +85,7 @@ app.get("/health", (req, res) => {
     status: "ok",
     message: "Backend healthy",
     allowedOrigins,
+    vercelPreviewAllowed: true,
   });
 });
 
@@ -91,6 +111,7 @@ const start = async () => {
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on port ${PORT}`);
       console.log(`Allowed CORS origins: ${allowedOrigins.join(", ")}`);
+      console.log("Vercel preview domains allowed: true");
     });
   } catch (error) {
     console.error("Failed to start server:", error);
