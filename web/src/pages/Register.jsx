@@ -1,157 +1,216 @@
 import React, { useState } from "react";
-import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import Footer from "../components/Footer";
-import { login, register } from "../services/auth";
+import { NavLink } from "react-router-dom";
+import { register } from "../services/auth";
 import "../assets/auth.css";
 
 const Register = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" ,confirmPassword: ""});
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const [success, setSuccess] = useState(false);
   const [error, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setErrors("");
-    setLoading(true);
-
-    try {
-      const { status } = await register(form.name, form.email, form.password, form.confirmPassword);
-
-      if (status == 201) setSuccess(true);
-    } catch (err) {
-      setErrors({ auth: err.message });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const validateField = (id, value, allValues) => {
     switch (id) {
-      case "email":
-        if (!value) return "Email wajib diisi";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-          return "Format email tidak valid";
-        return "";
-      case "password":
-        if (!value) return "Password wajib diisi";
-        if (value.length < 6) return "Password minimal 6 karakter";
-        return "";
-      case "confirmPassword":
-        if (value !== allValues.password) return "Password tidak cocok";
-        return "";
       case "name":
         if (!value) return "Nama wajib diisi";
         if (value.length < 3) return "Nama minimal 3 karakter";
         return "";
+
+      case "email":
+        if (!value) return "Email wajib diisi";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          return "Format email tidak valid";
+        }
+        return "";
+
+      case "password":
+        if (!value) return "Password wajib diisi";
+        if (value.length < 6) return "Password minimal 6 karakter";
+        return "";
+
+      case "confirmPassword":
+        if (!value) return "Konfirmasi password wajib diisi";
+        if (value !== allValues.password) return "Password tidak cocok";
+        return "";
+
       default:
         return "";
     }
   };
 
+  const validateForm = () => {
+    const nextErrors = {
+      name: validateField("name", form.name, form),
+      email: validateField("email", form.email, form),
+      password: validateField("password", form.password, form),
+      confirmPassword: validateField(
+        "confirmPassword",
+        form.confirmPassword,
+        form
+      ),
+    };
+
+    setErrors(nextErrors);
+
+    return !Object.values(nextErrors).some(Boolean);
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setErrors({});
+    setSuccess(false);
+
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await register(form.name, form.email, form.password);
+
+      setSuccess(true);
+      setErrors({});
+    } catch (err) {
+      setSuccess(false);
+      setErrors({
+        auth: err.message || "Register failed",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleChange = (e) => {
     const { id, value } = e.target;
-    const nextForm = { ...form, [id]: value };
+
+    const nextForm = {
+      ...form,
+      [id]: value,
+    };
+
     setForm(nextForm);
+    setSuccess(false);
 
     setErrors((prev) => ({
       ...prev,
       [id]: validateField(id, value, nextForm),
+      auth: "",
     }));
   };
 
   const isFormInvalid = () => {
-    return error.email || error.password || error.confirmPassword || error.name;
+    return Boolean(
+      loading ||
+        error.name ||
+        error.email ||
+        error.password ||
+        error.confirmPassword
+    );
   };
 
   return (
-    <>
-      <div className="app-wrapper">
-        <main className="main-content">
-          <div className={"form-wrapper"}>
-            <form action="" onSubmit={handleRegister}>
-              <div className="input-group">
-                <label htmlFor="name">Full Name</label>
-                <input
-                  id="name"
-                  type="name"
-                  placeholder="John Doe"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                />
-                {error.name && (
-                  <span className="field-error">{error.name}</span>
-                )}
-              </div>
-
-              <div className="input-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="john.doe@email.com"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
-                {error.email && (
-                  <span className="field-error">{error.email}</span>
-                )}
-              </div>
-
-              <div className="input-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
-                />
-                {error.password && (
-                  <span className="field-error">{error.password}</span>
-                )}
-              </div>
-
-              <div className="input-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  value={form.confirmPassword}
-                  onChange={handleChange}
-                  required
-                />
-                {error.confirmPassword && (
-                  <span className="field-error">{error.confirmPassword}</span>
-                )}
-              </div>
-
-              {error.auth && <div className="auth-error">{error.auth}</div>}
-              {success && (
-                <div className="auth-success">
-                  Registrasi Berhasil. Silahkan Masuk
-                </div>
+    <div className="app-wrapper">
+      <main className="main-content">
+        <div className="form-wrapper">
+          <form onSubmit={handleRegister}>
+            <div className="input-group">
+              <label htmlFor="name">Full Name</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="John Doe"
+                value={form.name}
+                onChange={handleChange}
+                autoComplete="name"
+                required
+              />
+              {error.name && (
+                <span className="field-error">{error.name}</span>
               )}
+            </div>
 
-              {!success && (
-                <button disabled={isFormInvalid()}>
-                  {loading ? "Memproses..." : "Daftar"}
-                </button>
+            <div className="input-group">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="john.doe@email.com"
+                value={form.email}
+                onChange={handleChange}
+                autoComplete="email"
+                required
+              />
+              {error.email && (
+                <span className="field-error">{error.email}</span>
               )}
+            </div>
 
-              <p className="auth-footer">
-                Sudah punya akun? <NavLink to="/login">Masuk</NavLink>
-              </p>
-            </form>
-          </div>
-        </main>
-      </div>
-    </>
+            <div className="input-group">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                value={form.password}
+                onChange={handleChange}
+                autoComplete="new-password"
+                required
+              />
+              {error.password && (
+                <span className="field-error">{error.password}</span>
+              )}
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                autoComplete="new-password"
+                required
+              />
+              {error.confirmPassword && (
+                <span className="field-error">{error.confirmPassword}</span>
+              )}
+            </div>
+
+            {error.auth && <div className="auth-error">{error.auth}</div>}
+
+            {success && (
+              <div className="auth-success">
+                Registrasi Berhasil. Silahkan Masuk
+              </div>
+            )}
+
+            {!success && (
+              <button type="submit" disabled={isFormInvalid()}>
+                {loading ? "Memproses..." : "Daftar"}
+              </button>
+            )}
+
+            <p className="auth-footer">
+              Sudah punya akun? <NavLink to="/login">Masuk</NavLink>
+            </p>
+          </form>
+        </div>
+      </main>
+    </div>
   );
 };
 

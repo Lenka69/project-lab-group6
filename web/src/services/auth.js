@@ -14,10 +14,11 @@ export const login = async (email, password) => {
       }),
     });
 
-    const apiResponse = await res.json();
+    const text = await res.text();
+    const apiResponse = text ? JSON.parse(text) : null;
 
     if (!res.ok) {
-      throw new Error(apiResponse.message || "Login failed");
+      throw new Error(apiResponse?.message || "Login failed");
     }
 
     return apiResponse.data;
@@ -40,13 +41,18 @@ export const register = async (name, email, password) => {
       }),
     });
 
-    const apiResponse = await res.json();
+    const text = await res.text();
+    const apiResponse = text ? JSON.parse(text) : null;
 
     if (!res.ok) {
-      throw new Error(apiResponse.message || "Register failed");
+      throw new Error(apiResponse?.message || "Register failed");
     }
 
-    return apiResponse;
+    return {
+      status: res.status,
+      data: apiResponse?.data,
+      message: apiResponse?.message,
+    };
   } catch (err) {
     throw new Error(err.message || "Terjadi kesalahan saat register");
   }

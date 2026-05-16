@@ -51,7 +51,6 @@ body {
   width: 100%;
 }
 
-/* Centered Pages */
 .me-wrapper {
   display: flex;
   justify-content: center;
@@ -61,7 +60,6 @@ body {
   gap: 12px;
 }
 
-/* Forms */
 .form-wrapper {
   display: flex;
   justify-content: center;
@@ -153,4 +151,22 @@ body {
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: bold;
+}
+
+.auth-success {
+  background-color: #087f23;
+  color: #ffffff;
+  border: 1px solid #1faa59;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.auth-error {
+  color: #ff4d4f;
+  margin: 12px 0;
+  font-size: 14px;
 }
