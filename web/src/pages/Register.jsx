@@ -5,7 +5,12 @@ import { login, register } from "../services/auth";
 import "../assets/auth.css";
 
 const Register = () => {
-  const [form, setForm] = useState({ name: "", email: "", password: "" ,confirmPassword: ""});
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [success, setSuccess] = useState(false);
   const [error, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -17,9 +22,14 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const { status } = await register(form.name, form.email, form.password, form.confirmPassword);
+      const { success } = await register(
+        form.name,
+        form.email,
+        form.password,
+        form.confirmPassword,
+      );
 
-      if (status == 201) setSuccess(true);
+      setSuccess(success);
     } catch (err) {
       setErrors({ auth: err.message });
     } finally {
