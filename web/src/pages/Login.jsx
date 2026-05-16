@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import LogRocket from "logrocket";
 import { login } from "../services/auth";
+import { identifyUser, trackEvent } from "../utils/analytics";
 import "../assets/auth.css";
 
 const Login = () => {
@@ -79,17 +79,13 @@ const Login = () => {
       localStorage.setItem("token", accessToken);
       localStorage.setItem("user", JSON.stringify(user));
 
-      const logRocketAppId = import.meta.env.VITE_LOGROCKET_APP_ID;
-
-      if (import.meta.env.PROD && logRocketAppId && user) {
-        LogRocket.identify(user.id || user._id || user.email, {
-          name: user.name,
-          email: user.email,
-        });
-      }
+      identifyUser(user);
+      trackEvent("login_success");
 
       navigate("/");
     } catch (err) {
+      trackEvent("login_failed");
+
       setErrors({
         auth: err.message || "Login gagal",
       });

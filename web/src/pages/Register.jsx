@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { register } from "../services/auth";
+import { trackEvent } from "../utils/analytics";
 import "../assets/auth.css";
 
 const Register = () => {
@@ -61,34 +62,6 @@ const Register = () => {
     return !Object.values(nextErrors).some(Boolean);
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    setErrors({});
-    setSuccess(false);
-
-    const isValid = validateForm();
-
-    if (!isValid) {
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      await register(form.name, form.email, form.password);
-
-      setSuccess(true);
-      setErrors({});
-    } catch (err) {
-      setSuccess(false);
-      setErrors({
-        auth: err.message || "Register failed",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleChange = (e) => {
     const { id, value } = e.target;
 
@@ -115,6 +88,38 @@ const Register = () => {
         error.password ||
         error.confirmPassword
     );
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    setErrors({});
+    setSuccess(false);
+
+    const isValid = validateForm();
+
+    if (!isValid) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await register(form.name, form.email, form.password);
+
+      setSuccess(true);
+      setErrors({});
+      trackEvent("register_success");
+    } catch (err) {
+      setSuccess(false);
+      trackEvent("register_failed");
+
+      setErrors({
+        auth: err.message || "Register failed",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
